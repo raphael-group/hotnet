@@ -54,6 +54,26 @@ HotNet algorithm. The output files are:
   for the observed number of subnetworks.
 * `results.json`: Contains all of the above information plus the parameters used for the run in
   JSON format to faciliate further automated processing
+* `heat.json`: Input heat scores in JSON format to facilitate further automated processing.
+
+The `simpleRun.py` script can also be used to create a web visualization of the output subnetworks.
+To do so, include the `--edge_file` parameter:
+
+        ========================================================================================================
+        | PARAMETER NAME         | DEFAULT          | DESCRIPTION                                              |
+        ========================================================================================================
+        |-ef/--edge_file         | None             |Path to TSV file listing edges of the interaction network,|
+        |                        |                  |where each row contains the indices of two genes that are |
+        |                        |                  |connected in the network. This is used to create          |
+        |                        |                  |subnetwork visualizations; if not provided, visualizations|
+        |                        |                  |will not be made.                                         |
+        --------------------------------------------------------------------------------------------------------
+        |-nn/--network_name      | Network          |Display name for the interaction network.                 |
+        --------------------------------------------------------------------------------------------------------
+
+This will result in a a `viz` subdirectory of the output directory. To view the visualizations,
+navigate to the `viz` directory and run `python -m SimpleHTTPServer`, then visit `http://localhost:8000`
+in a browser.
 
 To see an example, first make sure you have downloaded the influence matrices from
 [http://compbio.cs.brown.edu/projects/hotnet/](http://compbio.cs.brown.edu/projects/hotnet/)
@@ -398,7 +418,30 @@ The steps of the Hotnet algorithm and the code provided for each step are descri
         |-n/--num_permutations   | REQUIRED         |Number of permuted data sets to generate.                 |
         --------------------------------------------------------------------------------------------------------
 
-6. ###Output annotation###
+6. ###Visualization###
+
+    You can visualize the subnetworks output by HotNet using the `makeResultsWebsite.py` script.
+    It takes the following parameters:
+
+        ========================================================================================================
+        | PARAMETER NAME         | REQUIRED/DEFAULT | DESCRIPTION                                              |
+        ========================================================================================================
+        |-r/--results_files      | REQUIRED         |Paths to results.json files output by HotNet. Multiple    |
+        |                        |                  |file paths may be passed.                                 |
+        --------------------------------------------------------------------------------------------------------
+        |-ef/--edge_file         | REQUIRED         |Path to TSV file listing edges of the interaction network,|
+        |                        |                  |where each row contains the indices of two genes that are |
+        |                        |                  |connected in the network.                                 |
+        --------------------------------------------------------------------------------------------------------
+        |-nn/--network_name      | Network          |Display name for the interaction network.                 |
+        --------------------------------------------------------------------------------------------------------
+        |-o/--output_directory   | REQUIRED         |Output directory.                                         |
+        -------------------------------------------------------------------------------------------------------- 
+
+    To view the resulting visualizations, navigate to the output directory and run
+    `python -m SimpleHTTPServer`, then visit `http://localhost:8000` in a browser.
+
+7. ###Output annotation###
 
     The Python script `annotateOutput.py` marks each gene in the output subnetworks with the number
     of samples that contained a mutation in the gene.  It also includes the total number and
