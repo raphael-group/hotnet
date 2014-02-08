@@ -106,7 +106,7 @@ def run(args):
     edges = hnio.load_ppi_edges(args.edge_file) if args.edge_file else None
     index_file = '%s/viz_files/%s' % (os.path.realpath(__file__).rsplit('/', 1)[0], VIZ_INDEX)
     subnetworks_file = '%s/viz_files/%s' % (os.path.realpath(__file__).rsplit('/', 1)[0], VIZ_SUBNETWORKS)
-    gene2index = dict([(gene, index) for index, gene in gene_index.iteritems()])
+    gene2index = dict([(gene, index) for index, gene in infmat_index.iteritems()])
 
     #and run HotNet with that multiple and the next 4 multiples
     run_deltas = [i*medianDelta for i in range(i, i+5)]
