@@ -75,7 +75,8 @@ def heat_delta_wrapper(infmat, index2gene, heat_permutation, sizes):
     return find_best_delta(sim_mat, sizes)
 
 def heat_delta_selection(infmat, index2gene, heat_permutations, sizes, parallel=True):
-    """Return a dict mapping each size in sizes to a list of the best deltas for each heat
+    """
+    Return a dict mapping each size in sizes to a list of the best deltas for each heat
     permutation for that size. 
     
     Arguments:
