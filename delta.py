@@ -9,13 +9,16 @@ def get_component_sizes(arrs):
     return [len(arr) for arr in arrs]
 
 def delta_too_small(component_sizes, max_size ):
-    if max_size > max(component_sizes): return True
-    else: return False
+    if max_size > max(component_sizes): 
+        return True
+    else: 
+        return False
 
 Edge = namedtuple("Edge", ["node1", "node2", "weight"])
 
 def find_best_delta(permuted_sim, ks, start=0.05, quiet=True):
-    """Return a dict mapping each size in ks to the median delta that maximizes the number of
+    """
+    Return a dict mapping each size in ks to the median delta that maximizes the number of
     connected components of size at least k in the graph corresponding the the given similarity
     matrix.
     
@@ -26,7 +29,8 @@ def find_best_delta(permuted_sim, ks, start=0.05, quiet=True):
              searching for deltas that maximize the number of connected components
     """
     
-    if not quiet: print "Finding median delta that maximizes the # of CCs of size >= l"
+    if not quiet: 
+        print("Finding median delta that maximizes the # of CCs of size >= l")
     edges = get_edges(permuted_sim, start)
     k2delta = {}
 
@@ -39,7 +43,7 @@ def find_best_delta(permuted_sim, ks, start=0.05, quiet=True):
 def find_best_delta_for_given_k(permuted_sim, edges, k):
     
     if k < 2:
-            raise ValueError("k must be at least 2")
+        raise ValueError("k must be at least 2")
 
     max_num_ccs = 0 #initially, each node is its own CC of size 1, so none is of size >= k for k >= 2
     bestDeltas = [edges[0].weight]
@@ -64,7 +68,7 @@ def get_edges(sim, start=.05):
     edges = edges[:int(start*len(edges))]
     return edges
 
-def heat_delta_wrapper((infmat, index2gene, heat_permutation, sizes)):
+def heat_delta_wrapper(infmat, index2gene, heat_permutation, sizes):  
     M, index2gene = hn.induce_infmat(infmat, index2gene, sorted(heat_permutation.keys()))
     heat = hn.heat_vec(heat_permutation, index2gene)
     sim_mat = hn.similarity_matrix(M, heat)
