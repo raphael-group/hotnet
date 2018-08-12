@@ -104,19 +104,19 @@ def run(args):
     output_file = open(args.output_file, 'w') if args.output_file else sys.stdout
     json.dump({"parameters": vars(args), "heat_parameters": heat_params,
                "recommended_deltas": recommended_deltas}, output_file, indent=4)
-    if (args.output_file): output_file.close()
+    if (args.output_file): 
+        output_file.close()
 
-def get_deltas_for_heat(infmat, index2gene, gene2heat, addtl_genes, num_permutations,
-                        parallel):
-    print "* Performing permuted heat delta selection..."
+def get_deltas_for_heat(infmat, index2gene, gene2heat, addtl_genes, num_permutations, parallel):
+    print("* Performing permuted heat delta selection...")
     heat_permutations = permutations.permute_heat(gene2heat, num_permutations, addtl_genes, parallel)
     return get_deltas_from_heat_permutations(infmat, index2gene, heat_permutations, parallel)
 
 def get_deltas_for_mutations(args, infmat, index2gene, heat_params):    
-    print "* Performing permuted mutation data delta selection..."
+    print("* Performing permuted mutation data delta selection...")
     heat_permutations = permutations.generate_mutation_permutation_heat(
                             heat_params["heat_fn"], heat_params["sample_file"],
-                            heat_params["gene_file"], index2gene.values(), heat_params["snv_file"],
+                            heat_params["gene_file"], list(index2gene.values()), heat_params["snv_file"],
                             args.gene_length_file, args.bmr, args.bmr_file, heat_params["cna_file"],
                             args.gene_order_file, heat_params["cna_filter_threshold"],
                             heat_params["min_freq"], args.num_permutations, args.parallel)
