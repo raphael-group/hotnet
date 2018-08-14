@@ -137,18 +137,18 @@ def run(args):
     hnio.write_components_as_tsv(os.path.abspath(args.output_directory) + "/" + COMPONENTS_TSV, ccs)
 
 def heat_permutation_significance(args, heat, infmat, infmat_index, G):
-    print "* Performing permuted heat statistical significance..."
+    print("* Performing permuted heat statistical significance...")
     
     addtl_genes = hnio.load_genes(args.permutation_genes_file) if args.permutation_genes_file else None
     heat_permutations = permutations.permute_heat(heat, args.num_permutations, addtl_genes, args.parallel)
     return calculate_significance(args, infmat, infmat_index, G, heat_permutations)
 
 def mutation_permutation_significance(args, infmat, infmat_index, G, heat_params):
-    print "* Performing permuted mutation data statistical significance..."
+    print("* Performing permuted mutation data statistical significance...")
     
     heat_permutations = permutations.generate_mutation_permutation_heat(
                             heat_params["heat_fn"], heat_params["sample_file"],
-                            heat_params["gene_file"], infmat_index.values(), heat_params["snv_file"],
+                            heat_params["gene_file"], list(infmat_index.values()), heat_params["snv_file"],
                             args.gene_length_file, args.bmr, args.bmr_file, heat_params["cna_file"],
                             args.gene_order_file, heat_params["cna_filter_threshold"],
                             heat_params["min_freq"], args.num_permutations, args.parallel)
@@ -156,16 +156,16 @@ def mutation_permutation_significance(args, infmat, infmat_index, G, heat_params
     return calculate_significance(args, infmat, infmat_index, G, heat_permutations)
 
 def calculate_significance(args, infmat, infmat_index, G, heat_permutations):
-    sizes = range(args.cc_start_size, args.cc_stop_size+1)
+    sizes = list(range(args.cc_start_size, args.cc_stop_size+1))
     
-    print "\t- Using no. of components >= k (k \\in",
-    print "[%s, %s]) as statistic" % (min(sizes), max(sizes))
+    print("\t- Using no. of components >= k (k \\in")
+    print("[%s, %s]) as statistic" % (min(sizes), max(sizes)))
 
     #size2counts is dict(size -> (list of counts, 1 per permutation))
     sizes2counts = stats.calculate_permuted_cc_counts(infmat, infmat_index, heat_permutations,
                                                       args.delta, sizes, args.parallel)
     real_counts = stats.num_components_min_size(G, sizes)
-    size2real_counts = dict(zip(sizes, real_counts))
+    size2real_counts = dict(list(zip(sizes, real_counts)))
     return stats.compute_statistics(size2real_counts, sizes2counts, args.num_permutations)
 
 if __name__ == "__main__": 

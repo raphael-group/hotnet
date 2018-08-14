@@ -11,7 +11,8 @@ roots and to set weights.
 #    BSD license.
 
 class UnionFind:
-    """Union-find data structure.
+    """
+    Union-find data structure.
 
     Each unionFind instance X maintains a family of disjoint sets of
     hashable objects, supporting the following two methods:

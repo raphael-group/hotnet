@@ -187,7 +187,7 @@ def write_significance_as_tsv(output_file, sizes2stats):
     """
     with open(output_file, 'w') as out_f:
         out_f.write("Size\tExpected\tActual\tp-value\n")
-        for size, stats in sizes2stats.iteritems():
+        for size, stats in list(sizes2stats.items()):
             out_f.write("%s\t%s\t%s\t%s\n" % (size, stats["expected"], stats["observed"], stats["pval"]))
 
 def write_gene_list(output_file, genelist):

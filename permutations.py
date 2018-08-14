@@ -8,7 +8,7 @@ import multiprocessing as mp
 ################################################################################
 # Heat permutation
 
-def heat_permutation_wrapper((heat_scores, eligible_genes)): 
+def heat_permutation_wrapper(heat_scores, eligible_genes): 
     permuted_genes = list(eligible_genes)
     random.shuffle(permuted_genes)
     permuted_genes = permuted_genes[:len(heat_scores)]
@@ -33,7 +33,7 @@ def permute_heat(heat, num_permutations, addtl_genes=None, parallel=True):
     else:
         map_fn = map
 
-    heat_scores = heat.values()
+    heat_scores = list(heat.values())
     genes_eligible_for_heat = set(heat.keys()) | (set(addtl_genes) if addtl_genes else set())
     
     args = [(heat_scores, genes_eligible_for_heat)] * num_permutations
@@ -48,8 +48,8 @@ def permute_heat(heat, num_permutations, addtl_genes=None, parallel=True):
 ################################################################################
 # Mutation permutation
 
-def mutation_permuation_heat_wrapper((samples, genes, cnas, gene2length, bmr, gene2bmr,
-                                      gene2chromo,  chromo2genes, cna_filter_threshold, min_freq)):
+def mutation_permuation_heat_wrapper(samples, genes, cnas, gene2length, bmr, gene2bmr,
+                                      gene2chromo,  chromo2genes, cna_filter_threshold, min_freq):
     permuted_snvs = permute_snvs(samples, genes, gene2length, bmr, gene2bmr)
     permuted_cnas = permute_cnas(cnas, gene2chromo, chromo2genes)
     if cna_filter_threshold:
@@ -154,7 +154,7 @@ def permute_cnas(cnas, gene2chromo, chromo2genes):
     permuted_cnas = []
     for sample in samples2cnas:
         chromo2blocks = get_cna_blocks_for_sample(samples2cnas[sample], gene2chromo, chromo2genes)
-        for chromo, blocks in chromo2blocks.iteritems():
+        for chromo, blocks in list(chromo2blocks.items()):
             genes = chromo2genes[chromo]
             invalid_indices = []
             for block in blocks:
@@ -177,7 +177,7 @@ def get_block_indices(chromo_length, block_length, invalid_indices, max_attempts
         start = random.randint(0, chromo_length - block_length)
         attempts += 1
 
-    return range(start, start + block_length)
+    return list(range(start, start + block_length))
     
 
 def is_block_valid(start, block_length, invalid_indices):

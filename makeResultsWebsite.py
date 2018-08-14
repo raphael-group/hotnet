@@ -45,7 +45,7 @@ def run(args):
         gene2heat = json.load(open(results['parameters']['heat_file']))['heat']
         edges = hnio.load_ppi_edges(args.edge_file)
         gene2index = dict([(gene, index) for index, gene \
-                        in hnio.load_index(results['parameters']['infmat_index_file']).iteritems()])
+                        in list(hnio.load_index(results['parameters']['infmat_index_file']).items())])
         delta = results['parameters']['delta']
 
         deltas.append(delta)
