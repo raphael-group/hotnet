@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-
 # -*- coding: iso-8859-1 -*-
+
 import networkx as nx
 import scipy as sp
 import numpy as np

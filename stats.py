@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-
 # -*- coding: iso-8859-1 -*-
+
 import hotnet as hn
 import networkx as nx
 import multiprocessing as mp

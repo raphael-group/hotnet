@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-
 # -*- coding: iso-8859-1 -*-
+
 import hnap
 import hnio
 import hotnet as hn

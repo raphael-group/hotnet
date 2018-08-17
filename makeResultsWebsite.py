@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-#!/usr/bin/python
 import sys
 import shutil
 import os
