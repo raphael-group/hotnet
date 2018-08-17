@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # -*- coding: iso-8859-1 -*-
 import numpy as np
 import hotnet as hn
@@ -68,7 +70,8 @@ def get_edges(sim, start=.05):
     edges = edges[:int(start*len(edges))]
     return edges
 
-def heat_delta_wrapper(infmat, index2gene, heat_permutation, sizes):  
+def heat_delta_wrapper(heat_delta_wrapper_arg):  
+    (infmat, index2gene, heat_permutation, sizes) = heat_delta_wrapper_arg
     M, index2gene = hn.induce_infmat(infmat, index2gene, sorted(heat_permutation.keys()))
     heat = hn.heat_vec(heat_permutation, index2gene)
     sim_mat = hn.similarity_matrix(M, heat)

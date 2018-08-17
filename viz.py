@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import hnio
 
 def get_nodes(cc, gene2heat):

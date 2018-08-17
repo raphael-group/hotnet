@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # -*- coding: iso-8859-1 -*-
 import hotnet as hn
 import networkx as nx
@@ -14,15 +16,15 @@ def num_components_min_size(G, sizes):
     """
     return [len([cc for cc in nx.connected_components(G) if len(cc) >= s]) for s in sizes]
 
-def significance_wrapper(infmat, index2gene, heat_permutation, delta, sizes):
+def significance_wrapper(sig_wrapper_arg):
+    (infmat, index2gene, heat_permutation, delta, sizes) = sig_wrapper_arg
     M, index2gene = hn.induce_infmat(infmat, index2gene, sorted(heat_permutation.keys()))
     h = hn.heat_vec(heat_permutation, index2gene)
     sim_mat = hn.similarity_matrix(M, h)
     G = hn.weighted_graph(sim_mat, index2gene, delta)
     return num_components_min_size(G, sizes)
 
-def calculate_permuted_cc_counts(infmat, index2gene, heat_permutations, delta,
-                                sizes=list(range(2,11)), parallel=True):
+def calculate_permuted_cc_counts(infmat, index2gene, heat_permutations, delta, sizes=list(range(2,11)), parallel=True):
     """
     Return a dict mapping a CC size to a list of the number of CCs of that size or greater in
     each permutation.
