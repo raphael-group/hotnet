@@ -1,6 +1,10 @@
 HotNet
 =======================
 
+**We have introduced a new method, Hierarchical HotNet, that improves on HotNet.  As a result, HotNet is no longer actively updated.  Please see the Hierarchical HotNet [manuscript](https://academic.oup.com/bioinformatics/article/34/17/i972/5093236) and [GitHub repository](https://github.com/raphael-group/hierarchical-hotnet) for details.** 
+
+___
+
 HotNet is an algorithm for finding significantly altered subnetworks in a large gene interaction
 network. While originally developed for use with cancer mutation data, the current release of
 HotNet also supports the application in which scores can be assigned to genes in the network
