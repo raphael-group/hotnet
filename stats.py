@@ -1,10 +1,13 @@
+#!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
+
 import hotnet as hn
 import networkx as nx
 import multiprocessing as mp
 
 def num_components_min_size(G, sizes):
-    """Return a list of the number of connected components of size at least s for each s in sizes. 
+    """
+    Return a list of the number of connected components of size at least s for each s in sizes. 
     
     Arguments:
     G -- a networkx Graph
@@ -13,16 +16,17 @@ def num_components_min_size(G, sizes):
     """
     return [len([cc for cc in nx.connected_components(G) if len(cc) >= s]) for s in sizes]
 
-def significance_wrapper((infmat, index2gene, heat_permutation, delta, sizes)):
+def significance_wrapper(sig_wrapper_arg):
+    (infmat, index2gene, heat_permutation, delta, sizes) = sig_wrapper_arg
     M, index2gene = hn.induce_infmat(infmat, index2gene, sorted(heat_permutation.keys()))
     h = hn.heat_vec(heat_permutation, index2gene)
     sim_mat = hn.similarity_matrix(M, h)
     G = hn.weighted_graph(sim_mat, index2gene, delta)
     return num_components_min_size(G, sizes)
 
-def calculate_permuted_cc_counts(infmat, index2gene, heat_permutations, delta,
-                                 sizes=range(2,11), parallel=True):
-    """Return a dict mapping a CC size to a list of the number of CCs of that size or greater in
+def calculate_permuted_cc_counts(infmat, index2gene, heat_permutations, delta, sizes=list(range(2,11)), parallel=True):
+    """
+    Return a dict mapping a CC size to a list of the number of CCs of that size or greater in
     each permutation.
     
     Arguments:
@@ -59,7 +63,8 @@ def calculate_permuted_cc_counts(infmat, index2gene, heat_permutations, delta,
     return size2counts
 
 def compute_statistics(size2counts_real, size2counts_permuted, num_permutations):
-    """Return a dict mapping a CC size to a dict with the expected number of CCs of at least that
+    """
+    Return a dict mapping a CC size to a dict with the expected number of CCs of at least that
     size based on permuted data, the observed number of CCs of at least that size in the real data,
     and the p-value for the observed number.
     
@@ -71,8 +76,8 @@ def compute_statistics(size2counts_real, size2counts_permuted, num_permutations)
      
     """
     num_permutations = float(num_permutations)
-    size2stats = dict([(s, []) for s in size2counts_permuted.keys()])
-    for size, counts in size2counts_permuted.items():
+    size2stats = dict([(s, []) for s in list(size2counts_permuted.keys())])
+    for size, counts in list(size2counts_permuted.items()):
         observed = size2counts_real[size]
         expected = sum(counts) / num_permutations
         pval = len([ c for c in counts if c >= observed ]) / num_permutations

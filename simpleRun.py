@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 import hnap
 import hnio
@@ -75,8 +77,8 @@ def run(args):
     if not os.path.exists(args.output_directory):
         os.makedirs(args.output_directory)
     if len(os.listdir(args.output_directory)) > 0:
-        print("WARNING: Output directory is not empty. Any conflicting files will be overwritten. "
-              "(Ctrl-c to cancel).")
+        print("WARNING: Output directory is not empty. Any conflicting files will be overwritten. ")
+        print("(Ctrl-c to cancel).")
     
     infmat = scipy.io.loadmat(args.infmat_file)[INFMAT_NAME]
     infmat_index = hnio.load_index(args.infmat_index_file)
@@ -106,7 +108,7 @@ def run(args):
     edges = hnio.load_ppi_edges(args.edge_file) if args.edge_file else None
     index_file = '%s/viz_files/%s' % (os.path.realpath(__file__).rsplit('/', 1)[0], VIZ_INDEX)
     subnetworks_file = '%s/viz_files/%s' % (os.path.realpath(__file__).rsplit('/', 1)[0], VIZ_SUBNETWORKS)
-    gene2index = dict([(gene, index) for index, gene in infmat_index.iteritems()])
+    gene2index = dict([(gene, index) for index, gene in list(infmat_index.items())])
 
     #and run HotNet with that multiple and the next 4 multiples
     run_deltas = [i*medianDelta for i in range(i, i+5)]
@@ -121,15 +123,15 @@ def run(args):
         ccs = hn.connected_components(G, args.min_cc_size)
         
         # calculate significance (using all genes with heat scores)
-        print "* Performing permuted heat statistical significance..."
+        print("* Performing permuted heat statistical significance...")
         heat_permutations = p.permute_heat(heat, args.num_permutations, addtl_genes, args.parallel)
-        sizes = range(2, 11)
-        print "\t- Using no. of components >= k (k \\in",
-        print "[%s, %s]) as statistic" % (min(sizes), max(sizes))
+        sizes = list(range(2, 11))
+        print("\t- Using no. of components >= k (k \\in")
+        print("[%s, %s]) as statistic" % (min(sizes), max(sizes)))
         sizes2counts = stats.calculate_permuted_cc_counts(infmat, infmat_index, heat_permutations,
                                                           delta, sizes, args.parallel)
         real_counts = stats.num_components_min_size(G, sizes)
-        size2real_counts = dict(zip(sizes, real_counts))
+        size2real_counts = dict(list(zip(sizes, real_counts)))
         sizes2stats = stats.compute_statistics(size2real_counts, sizes2counts, args.num_permutations)
     
         # sort ccs list such that genes within components are sorted alphanumerically, and components
@@ -161,8 +163,7 @@ def run(args):
         if args.edge_file:
             viz_data = {"delta": delta, 'subnetworks': list()}
             for cc in ccs:
-                viz_data['subnetworks'].append(viz.get_component_json(cc, heat, edges, gene2index,
-                                                                      args.network_name))
+                viz_data['subnetworks'].append(viz.get_component_json(cc, heat, edges, gene2index, args.network_name))
                 
             delta_viz_dir = '%s/viz/delta%s' % (args.output_directory, delta)
             if not os.path.isdir(delta_viz_dir):

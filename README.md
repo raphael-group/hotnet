@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/evanbiederstedt/hotnet.svg?branch=master)](https://travis-ci.org/evanbiederstedt/hotnet)
+
+
 HotNet
 =======================
 

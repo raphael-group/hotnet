@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from collections import defaultdict
 from constants import *
 
@@ -14,8 +16,8 @@ def filter_heat(heat, min_score):
                  included in the input dict 
     """
     if min_score is None:
-        min_score = min([score for score in heat.values() if score > 0])
-    filtered_heat = dict([(gene, score) for gene, score in heat.iteritems() if score >= min_score])
+        min_score = min([score for score in list(heat.values()) if score > 0])
+    filtered_heat = dict([(gene, score) for gene, score in list(heat.items()) if score >= min_score])
     return filtered_heat, [gene for gene in heat if gene not in filtered_heat], min_score
 
 def num_snvs(mutations):
@@ -54,7 +56,7 @@ def filter_cnas(cnas, filter_thresh):
     for cna in filtered_cnas:
         genes2cnas[cna.gene].append(cna)
     
-    for gene_cnas in genes2cnas.itervalues():
+    for gene_cnas in list(genes2cnas.values()):
         amp_count = float(len([cna for cna in gene_cnas if cna.mut_type == AMP]))
         del_count = float(len([cna for cna in gene_cnas if cna.mut_type == DEL]))
         if (amp_count / (amp_count + del_count)) >= filter_thresh:
@@ -91,11 +93,10 @@ def mut_heat(num_samples, snvs, cnas, min_freq, quiet=True):
     for cna in cnas:
         genes2mutations[cna.gene].add(cna)
     
-    if not quiet: print("\t- Including %s genes in %s samples at min frequency %s" %
-          (len(genes2mutations), num_samples, min_freq))
+    if not quiet:
+        print("\t- Including %s genes in %s samples at min frequency %s" % (len(genes2mutations), num_samples, min_freq))
     
-    return dict([(g, len(heat) / float(num_samples)) for g, heat in genes2mutations.items()
-                 if num_snvs(heat) >= min_freq or num_cnas(heat) > 0])
+    return dict([(g, len(heat) / float(num_samples)) for g, heat in list(genes2mutations.items()) if num_snvs(heat) >= min_freq or num_cnas(heat) > 0])
 
 def expr_filter_heat(gene2heat, genes_to_preserve):
     """Return (1) a dict mapping gene names to heat scores containing only entries for genes in

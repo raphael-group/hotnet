@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Union-find data structure.  The implementation below is copied from the NetworkX implementation 
 (see https://github.com/networkx/) but adds explicit root tracking and external access to the 
@@ -11,7 +13,8 @@ roots and to set weights.
 #    BSD license.
 
 class UnionFind:
-    """Union-find data structure.
+    """
+    Union-find data structure.
 
     Each unionFind instance X maintains a family of disjoint sets of
     hashable objects, supporting the following two methods:

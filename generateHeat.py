@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import hnap
 import hnio
 import heat as hnheat
